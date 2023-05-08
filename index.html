@@ -34,7 +34,7 @@ I only gave the code for collision
   
 	<title>Collision Map In Div by Kashumy.github </title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable =0">
-	<div class="joystick">
+	<div id="tsys" class="joystick">
   <div class="stick"></div>
 </div>
 
@@ -241,16 +241,17 @@ function checkCollision(dx, dy) {
 document.addEventListener('keydown', event => {
 	switch (event.key) {
 		case 'ArrowLeft':
-			movePlayer(-1, 0);
+			movePlayer(-0.05, 0);
 			break;
 		case 'ArrowRight':
-			movePlayer(1, 0);
+			movePlayer(0.05, 0);
 			break;
 		case 'ArrowUp':
-			movePlayer(0, -1);
+			movePlayer(0, -0.06);
 			break;
 		case 'ArrowDown':
-			movePlayer(0, 1);
+			//for move down
+           //dla poruszania w dul
 			break;
 	}
 });
@@ -391,6 +392,10 @@ function loopY(){
 </body>
 </html>
 <script>
-  
+ if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|android|ipad|playbook|silk/i.test(navigator.userAgent) ){
 
+document.getElementById('tsys').style.display="block" 
+}else{
+document.getElementById('tsys').style.display="none" 
+} 
 </script>
