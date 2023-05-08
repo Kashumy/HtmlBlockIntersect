@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable =0"/>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<html>
+<head>
+  
+  
+  <!-- 
+          
+          Read me html
+          
+      - - - - - - - - - - - 
+          Download zip now!!! 
+
+
+    Open source no copyright
+ Maded by Kashumy.github 
+
+🇵🇱 Made by Polish creator 
+
+ ° Do not  use joy stick because joystick 
+ is so buggy
+ only collision dont have copyright 
+ all rights reserved 
+Delete unnecessary comments Rename
+ functions Change variable 
+text Rename variables and the 
+game is yours Only  use your 
+events and correct errors because 
+I only gave the code for collision
+  -->
+  
+  
+  
+	<title>Collision Map In Div by Kashumy.github </title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable =0">
+	<div class="joystick">
+  <div class="stick"></div>
+</div>
+
+	<style>
+		body {
+		  overflow :hidden ;
+			margin: 0;
+			padding: 0;
+			background-color: #000000;
+		}
+		.joystick {
+  position: absolute ;
+  bottom :50px;
+  left:30px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #84848466;
+}
+
+.stick {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  top: 25px;
+  left: 25px;
+  border-radius: 50%;
+  background-color: white;
+}
+
+		#game-board {
+			position :fixed;
+			height :300%;
+			width: 450px;
+			/*318.5%*/
+			
+			margin: auto;
+			z-index :-1;
+		}
+		* {
+		  margin: 0;
+		  overflow: hidden;
+		}
+		.tile {
+		  Float:left ;
+			width: 40px;
+			height: 40px;
+			background-color: #2BFF00;
+			
+			box-sizing: border-box;
+		}
+		.null {
+		  Float:left ;
+		  width: 40px;
+		  height: 40px;
+		  background-color: #009CFF;
+		  
+		  box-sizing: border-box;
+		}
+		.nothing {
+		  Float: left;
+		  width: 40px;
+		  height: 40px;
+		  background-color: #0012FF00;
+		
+		  box-sizing: border-box;
+		}
+		#player {
+			width: 30px;
+			height: 30px;
+			background-color: #FF0000;
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+	</style>
+</head>
+<body>
+	<div id="game-board">
+	
+		<!--  płytki kafelkowe -->
+	</div>
+	<div id="player"></div>
+</body>
+</html>
+<script>
+  if(innerWidth>600){
+    document.getElementById('game-board').style.left = 25+"vw"
+    document.getElementById('game-board').style.top = 15+"vh"
+    document.getElementById('player').style.left = 25+"vw"
+    setTimeout(playerCompactResponive, 200)
+    
+  }
+  function playerCompactResponive(){
+    playerX=5
+  }
+</script>
+<script>
+  var col = {
+    rodaj: 0,
+  
+    x: -50,
+    obj: 0,
+    y: 0,
+    object_y: 0
+  }
+  var cli = []
+  var cli2 = []
+  var pushcoll = 0;
+  var column = 0;
+  var map = ""
+  var ii = 0;
+  var newcol = 0;
+  var tnc = 0;
+  var Objs = [ //matryc
+  0,0,0,0,0,0,0,0,0,0,0, 
+  0,0,0,0,0,0,0,0,0,1,0,
+  1,0,0,0,0,0,0,0,0,1,1,
+  1,1,1,0,0,0,0,0,1,1,1, 
+  1,1,1,1,1,0,0,1,1,1,1, 
+  
+  ]
+  
+  for (var i = 0; i < Objs.length; i++) {
+    tnc += 1;
+    ii += 50;
+  
+    if (tnc >= 10) {
+      tnc = 1;
+      newcol += 50;
+      ii = 50
+    }
+    col.x = ii;
+    col.y = newcol;
+  
+  
+    if (Objs[i] === 1) {
+  
+      map += '<div class="tile" ></div>'
+  
+    }
+    if (Objs[i] === 0) {
+  
+      map += '<div class="null" ></div>'
+  
+    }
+    if (Objs[i] === 2) {
+    
+      map += '<div class="nothing" ></div>'
+    
+    }
+  }
+  lo()
+  
+  function lo() {
+    document.getElementById('game-board').innerHTML = map;
+  setTimeout(constructn, 0)
+    setTimeout(lo, 20)
+  }
+</script>
+<script>
+  const player = document.querySelector('#player');
+  
+  var tiles = document.querySelectorAll('.tile');
+  function constructn(){
+     tiles = document.querySelectorAll('.tile');
+    
+  }
+
+const gameBoard = document.querySelector('#game-board');
+const tileSize = 40;
+
+let playerX = 0;
+let playerY = 0;
+
+function movePlayer(dx, dy) {
+  
+	playerX += dx;
+	playerY += dy;
+	checkCollision(dx, dy);
+	player.style.left = playerX * tileSize + 'px';
+	player.style.top = playerY * tileSize + 'px';
+}
+
+function checkCollision(dx, dy) {
+	for (let tile of tiles) {
+		const rect1 = player.getBoundingClientRect();
+		const rect2 = tile.getBoundingClientRect();
+		if (rect1.bottom > rect2.top &&
+			rect1.top < rect2.bottom &&
+			rect1.right > rect2.left &&
+			rect1.left < rect2.right) {
+			
+			playerY -= dy+0.01;
+			// blokuje poruszanie x
+			playerX -= dx; 
+			player.style.left = playerX * tileSize + 'px';
+			player.style.top = playerY * tileSize + 'px';
+			return;
+		}
+	}
+}
+
+document.addEventListener('keydown', event => {
+	switch (event.key) {
+		case 'ArrowLeft':
+			movePlayer(-1, 0);
+			break;
+		case 'ArrowRight':
+			movePlayer(1, 0);
+			break;
+		case 'ArrowUp':
+			movePlayer(0, -1);
+			break;
+		case 'ArrowDown':
+			movePlayer(0, 1);
+			break;
+	}
+});
+
+function movleft(){
+  movePlayer(0.05,0)
+}
+function movright() {
+  movePlayer(-0.05, 0)
+}
+function movup() {
+  movePlayer(0, -0.06)
+}
+  const stick = document.querySelector('.stick');
+const joystick = document.querySelector('.joystick');
+const joystickRect = joystick.getBoundingClientRect();
+
+let isDragging = false;
+let joystickX = 0;
+let joystickY = 0;
+
+function updateJoystick(event) {
+  let x, y;
+  if (event.type === 'touchmove') {
+    x = event.touches[0].clientX - joystickRect.left - joystickRect.width / 2;
+    y = event.touches[0].clientY - joystickRect.top - joystickRect.height / 2;
+  } else {
+    x = event.clientX - joystickRect.left - joystickRect.width / 2;
+    y = event.clientY - joystickRect.top - joystickRect.height / 2;
+  }
+ if(x>30){
+   movleft()
+ }
+ if (x < 30) {
+   movright()
+ }
+ 
+  const distance = Math.sqrt(x * x + y * y);
+  const angle = Math.atan2(y, x);
+  const maxDistance = joystickRect.width / 2 - stick.getBoundingClientRect().width / 2;
+if (y < - 40 && distance > 40) {
+  movup()
+}
+  if (distance > maxDistance) {
+    x = Math.cos(angle) * maxDistance;
+    y = Math.sin(angle) * maxDistance;
+  }
+
+  stick.style.transform = `translate(${x}px, ${y}px)`;
+  
+  movePlayer(0,0)
+}
+
+stick.addEventListener('mousedown', event => {
+  isDragging = true;
+  updateJoystick(event);
+});
+
+document.addEventListener('mousemove', event => {
+  if (isDragging) {
+    updateJoystick(event);
+  }
+});
+
+document.addEventListener('mouseup', () => {
+  isDragging = false;
+  stick.style.transform = 'translate(0px, 0px)';
+});
+
+stick.addEventListener('touchstart', event => {
+  event.preventDefault();
+  isDragging = true;
+  updateJoystick(event);
+});
+
+document.addEventListener('touchmove', event => {
+  event.preventDefault();
+  if (isDragging) {
+    updateJoystick(event);
+  }
+});
+
+document.addEventListener('touchend', () => {
+  isDragging = false;
+  stick.style.transform = 'translate(0px, 0px)';
+});
+gravity()
+function gravity(){
+  movePlayer(0,0.01)
+  movePlayer(0, 0)
+  setTimeout(gravity, 2)
+}
+
+</script>
+
+ 
+  <style>
+    /* stylowanie konsoli */
+    #console {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+ 
+  
+  <div id="console">x: <span id="x"></span>, y: <span id="y"></span></div>
+
+  <script>
+    // pobierz elements z HTML
+    const xElement = document.getElementById('x');
+    const yElement = document.getElementById('y');
+
+    // funkcja do aktualizacji poz x i y
+    function updatePosition(event) {
+      // pobierz pozycję zdarzenia
+      
+
+      / zaktualizuj wartości w HTml
+      xElement.textContent = Math.floor (playerX) ;
+      yElement.textContent = Math.floor (playerY);
+    }
+    loopY()
+function loopY(){
+  updatePosition()
+  setTimeout(loopY, 2)
+}
+    // dodaj nasłuchiwanie na zdarzenie mousemove
+    
+  </script>
+</body>
+</html>
+<script>
+  
+
+</script>
